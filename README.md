@@ -1,56 +1,56 @@
-# SimpleWallet
+# VotingSystem
 
 ## Description
 
-SimpleWallet is a basic Ethereum smart contract that allows users to deposit, withdraw, and transfer funds. It includes owner-controlled functionality to reset all balances and uses `require()`, `assert()`, and `revert()` statements to ensure the correctness and safety of operations.
+VotingSystem is a basic Ethereum smart contract that allows users to propose candidates, vote for candidates, and enables the owner to reset the voting system. It uses `require()`, `assert()`, and `revert()` statements to ensure the correctness and safety of operations.
 
 ## Features
 
-- Deposit funds into the wallet.
-- Withdraw funds from the wallet.
-- Transfer funds to another account.
-- Owner can reset all balances to zero.
+- Propose candidates.
+- Vote for candidates.
+- Owner can end voting.
+- Owner can reset the voting system.
 - Uses Solidity's `require()`, `assert()`, and `revert()` statements for error handling.
 
-## Requirements
+# Requirements
+
+## Smart Contract
 
 ### Constructor
 
 #### `constructor()`
-- Initializes the contract by setting the deployer as the owner.
+- Initializes the contract by setting the deployer as the owner and sets voting as active.
 
 ### Functions
 
-#### `deposit()`
-- Allows users to deposit funds into their wallet.
-- Emits a `Deposit` event.
+#### `proposeCandidate(string memory name)`
+- Allows the owner to propose a new candidate.
+- Requires that the candidate name is not empty.
+- Emits a `CandidateProposed` event.
 
-#### `withdraw(uint256 amount)`
-- Allows users to withdraw funds from their wallet.
-- Requires that the withdrawal amount is greater than zero and that the user has sufficient balance.
-- Emits a `Withdraw` event.
+#### `vote(uint256 candidateId)`
+- Allows users to vote for a candidate.
+- Requires that the user has not already voted and the candidate ID is valid.
+- Emits a `VoteCast` event.
 
-#### `transfer(address to, uint256 amount)`
-- Allows users to transfer funds to another account.
-- Requires a valid recipient address, a transfer amount greater than zero, and that the sender has sufficient balance.
-- Emits a `Transfer` event.
+#### `endVoting()`
+- Allows the owner to end the voting process.
 
-#### `resetWallet()`
-- Allows the owner to reset all balances to zero.
-- Uses a loop to iterate through possible addresses (illustrative only; not feasible in practice).
-- Reverts the transaction if no balances are found to reset.
+#### `resetVoting()`
+- Allows the owner to reset the voting system if voting has ended.
+- Reverts the transaction if attempted during active voting.
 
 ## Error Handling
 
-- `require()`: Ensures conditions such as non-zero amounts and sufficient balances before proceeding with transactions.
+- `require()`: Ensures conditions such as non-empty candidate names, valid candidate IDs, and that users have not voted multiple times.
 - `assert()`: Used to verify the correctness of internal state changes.
-- `revert()`: Used in the `resetWallet` function to revert the transaction if no balances are found to reset.
+- `revert()`: Used in the `resetVoting` function to revert the transaction if voting is still active.
 
 ## Events
 
-- `Deposit(address indexed account, uint256 amount)`: Emitted when a deposit is made.
-- `Withdraw(address indexed account, uint256 amount)`: Emitted when a withdrawal is made.
-- `Transfer(address indexed from, address indexed to, uint256 amount)`: Emitted when a transfer is made.
+- `CandidateProposed(uint256 id, string name)`: Emitted when a candidate is proposed.
+- `VoteCast(uint256 candidateId, address voter)`: Emitted when a vote is cast.
+
 
 # Help
 
